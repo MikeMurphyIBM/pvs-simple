@@ -8,16 +8,15 @@ terraform {
 }
 
 provider "ibm" {
-  region = "us-south"
+  region = "dal10"      # <-- MUST MATCH YOUR WORKSPACE REGION
 }
 
-# PowerVS workspace
+# PowerVS workspace (classic PI)
 data "ibm_resource_instance" "pvs_workspace" {
   name = "murphy"
 }
 
-# PowerVS image lookup
-# (Note: provider v1.85 expects pi_cloud_instance_id + pi_image_name)
+# Image lookup
 data "ibm_pi_image" "os_image" {
   pi_cloud_instance_id = data.ibm_resource_instance.pvs_workspace.guid
   pi_image_name        = "7200-05-10"
@@ -27,21 +26,22 @@ data "ibm_pi_image" "os_image" {
 resource "ibm_pi_instance" "my_power_vm" {
   pi_cloud_instance_id = data.ibm_resource_instance.pvs_workspace.guid
 
-  # Required instance fields (v1.85 uses pi_instance_name + pi_image_id)
+  # Instance identity
   pi_instance_name = "clone-test"
   pi_image_id      = data.ibm_pi_image.os_image.id
 
-  memory      = 2
-  processors  = 0.25
-  proc_type   = "shared"
+  # Compute (correct attributes for PI)
+  memory            = 2        # in GB
+  processors        = 0.25
+  proc_type         = "shared"
 
-  # Network: use your known network ID directly
+  # Network (using known ID)
   pi_network {
     network_id = "eb8a0e15-04f5-45e2-81e4-1bffe6131bf8"
   }
 
-  # SSH key & system details
-  key_pair_name = "clone"   # must match your SSH key name in the PVS workspace
+  # System & storage
+  key_pair_name = "clone"
   sys_type      = "s922"
   storage_type  = "tier3"
 }
