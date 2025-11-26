@@ -2,51 +2,48 @@ terraform {
   required_providers {
     ibm = {
       source  = "IBM-Cloud/ibm"
-      version = ">= 1.57.0"
+      version = ">= 1.85.0"
     }
   }
 }
 
 provider "ibm" {
-  region = "us-south"          # <-- CHANGE IF YOUR WORKSPACE IS NOT IN US-SOUTH
+  region = "us-south"
 }
 
-# REQUIRED: Your PowerVS workspace name
+# PowerVS Workspace
 data "ibm_resource_instance" "pvs_workspace" {
   name = "murphy"
 }
 
-# Image (AIX 7200-05-10)
-data "ibm_pi_image" "os_image" {
-  pi_cloud_instance_id = data.ibm_resource_instance.pvs_workspace.id
-  name                 = "7200-05-10"
+# Image
+data "ibm_pis_image" "os_image" {
+  cloud_instance_id = data.ibm_resource_instance.pvs_workspace.guid
+  name              = "7200-05-10"
 }
 
-# REQUIRED: Your subnet name exactly as it appears in PowerVS
-data "ibm_pi_subnet" "pvs_network" {
-  pi_cloud_instance_id = data.ibm_resource_instance.pvs_workspace.id
-  name                 = "murphy-subnet"
+# Subnet
+data "ibm_pis_subnet" "pvs_network" {
+  cloud_instance_id = data.ibm_resource_instance.pvs_workspace.guid
+  name              = "murphy-subnet"
 }
 
-resource "ibm_pi_instance" "my_power_vm" {
-  pi_cloud_instance_id = data.ibm_resource_instance.pvs_workspace.id
+# PowerVS Instance (new format)
+resource "ibm_pis_instance" "my_power_vm" {
+  cloud_instance_id = data.ibm_resource_instance.pvs_workspace.guid
 
-  # VM settings
-  name        = "clone-test"
-  image_id    = data.ibm_pi_image.os_image.image_id
-  memory      = 2
-  processors  = 0.25
-  proc_type   = "shared"
+  pi_instance_name = "clone-test"
+  pi_image_id      = data.ibm_pis_image.os_image.image_id
 
-  # Network
-  networks = [
-    {
-      network_id = data.ibm_pi_subnet.pvs_network.id
-    }
-  ]
+  memory           = 2
+  processors       = 0.25
+  proc_type        = "shared"
 
-  # Additional required fields
-  key_pair_name = "clone"      # <-- Your SSH key name in PowerVS
-  sys_type      = "s922"
-  storage_type  = "tier3"
+  pi_network {
+    network_id = data.ibm_pis_subnet.pvs_network.network_id
+  }
+
+  key_pair_name    = "clone"
+  sys_type         = "s922"
+  storage_type     = "tier3"
 }
