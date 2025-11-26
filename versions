@@ -7,7 +7,4 @@ terraform {
   }
 }
 
-provider "ibm" {
-  region = "us-south"
-}
 
