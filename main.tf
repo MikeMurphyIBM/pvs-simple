@@ -1,11 +1,4 @@
-terraform {
-  required_providers {
-    ibm = {
-      source  = "ibm-cloud/ibm"
-      version = ">= 1.61.0"
-    }
-  }
-}
+
 
 data "ibm_resource_group" "group" {
   name = "Default"
