@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    ibm = {
+      source  = "IBM-Cloud/ibm"
+      version = ">= 1.57.0"
+    }
+  }
+}
+
 provider "ibm" {
   region = "us-south"          # <-- CHANGE IF YOUR WORKSPACE IS NOT IN US-SOUTH
 }
