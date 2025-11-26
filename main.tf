@@ -11,39 +11,37 @@ provider "ibm" {
   region = "us-south"
 }
 
-# PowerVS Workspace
+# PowerVS workspace
 data "ibm_resource_instance" "pvs_workspace" {
   name = "murphy"
 }
 
-# PowerVS Image (correct arguments for v1.85)
+# PowerVS image lookup
+# (Note: provider v1.85 expects pi_cloud_instance_id + pi_image_name)
 data "ibm_pi_image" "os_image" {
   pi_cloud_instance_id = data.ibm_resource_instance.pvs_workspace.guid
   pi_image_name        = "7200-05-10"
 }
 
-# PowerVS Network (correct arguments for v1.85)
-data "ibm_pi_network" "pvs_network" {
-  pi_cloud_instance_id = data.ibm_resource_instance.pvs_workspace.guid
-  pi_network_name      = "murphy-subnet"
-}
-
-# PowerVS Instance (correct arguments for v1.85)
+# PowerVS instance
 resource "ibm_pi_instance" "my_power_vm" {
   pi_cloud_instance_id = data.ibm_resource_instance.pvs_workspace.guid
 
+  # Required instance fields (v1.85 uses pi_instance_name + pi_image_id)
   pi_instance_name = "clone-test"
-  pi_image_id      = data.ibm_pi_image.os_image.pi_image_id
+  pi_image_id      = data.ibm_pi_image.os_image.image_id
 
   memory      = 2
   processors  = 0.25
   proc_type   = "shared"
 
+  # Network: use your known network ID directly
   pi_network {
-    network_id = data.ibm_pi_network.pvs_network.network_id
+    network_id = "eb8a0e15-04f5-45e2-81e4-1bffe6131bf8"
   }
 
-  key_pair_name = "clone"
+  # SSH key & system details
+  key_pair_name = "clone"   # must match your SSH key name in the PVS workspace
   sys_type      = "s922"
   storage_type  = "tier3"
 }
