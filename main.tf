@@ -17,19 +17,19 @@ data "ibm_resource_instance" "pvs_workspace" {
 }
 
 # Image
-data "ibm_pis_image" "os_image" {
+data "ibm_pi_image" "os_image" {
   cloud_instance_id = data.ibm_resource_instance.pvs_workspace.guid
   name              = "7200-05-10"
 }
 
 # Subnet
-data "ibm_pis_subnet" "pvs_network" {
+data "ibm_pi_network" "pvs_network" {
   cloud_instance_id = data.ibm_resource_instance.pvs_workspace.guid
   name              = "murphy-subnet"
 }
 
 # PowerVS Instance (new format)
-resource "ibm_pis_instance" "my_power_vm" {
+resource "ibm_pi_instance" "my_power_vm" {
   cloud_instance_id = data.ibm_resource_instance.pvs_workspace.guid
 
   pi_instance_name = "clone-test"
