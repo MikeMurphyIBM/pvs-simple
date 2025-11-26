@@ -27,7 +27,7 @@ variable "pvs_workspace_name" {
 variable "pvs_aix_image_id" {
   description = "The image ID for the AIX Image we want to deploy"
   type = string
-  default = "52f2891b-6e4b-4765-bc0e-43cdc036305a"
+  default = "5ccf25e5-e543-4fe7-bbc4-cf0fbb2be420"
 }
 
 variable "pvs_aix_image_name" {
