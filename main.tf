@@ -18,7 +18,7 @@ resource "ibm_pi_key" "key" {
 # Get existing subnet
 data "ibm_pi_network" "pvs_network" {
   pi_cloud_instance_id = data.ibm_resource_instance.pvs_workspace.id
-  pi_network_name      = "murphy-subnet"
+  pi_network_id      = "ca78b0d5-f77f-4e8c-9f2c-545ca20ff073"
 }
 
 # Create AIX LPAR
