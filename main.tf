@@ -7,45 +7,40 @@ terraform {
   }
 }
 
-
 provider "ibm" {
   region = "us-south"
 }
 
-# PowerVS workspace
+# PowerVS Workspace
 data "ibm_resource_instance" "pvs_workspace" {
   name = "murphy"
 }
 
-# AIX Image Lookup (old naming required by Schematics)
-data "ibm_pi_image" "os_image" {
-  pi_cloud_instance_id = data.ibm_resource_instance.pvs_workspace.id
-  pi_image_name        = "AIX 7200-05-10"
+# Get ALL images in the workspace
+data "ibm_pi_images" "all_images" {
+  cloud_instance_id = data.ibm_resource_instance.pvs_workspace.guid
 }
 
-# Network lookup (old naming)
+# Select the AIX image by name
+locals {
+  aix_image = [
+    for img in data.ibm_pi_images.all_images.images :
+    img if img.name == "AIX 7200-05-10"
+  ][0]
+}
+
+# Network lookup
 data "ibm_pi_network" "pvs_network" {
-  pi_cloud_instance_id = data.ibm_resource_instance.pvs_workspace.id
-  pi_network_name      = "murphy-subnet"
+  cloud_instance_id = data.ibm_resource_instance.pvs_workspace.guid
+  pi_network_name   = "murphy-subnet"
 }
 
-# VM creation (old block naming)
+# Create VM
 resource "ibm_pi_instance" "my_power_vm" {
-  pi_cloud_instance_id = data.ibm_resource_instance.pvs_workspace.id
+  cloud_instance_id = data.ibm_resource_instance.pvs_workspace.guid
 
   pi_instance_name = "clone-test"
-  pi_image_id      = data.ibm_pi_image.os_image.image
+  pi_image_id      = local.aix_image.id
 
   memory       = 2
-  processors   = 0.25
-  proc_type    = "shared"
-
-  sys_type     = "s922"
-  storage_type = "tier3"
-
-  key_pair_name = "murphy-clone-key"
-
-  pi_network {
-    network_id = data.ibm_pi_network.pvs_network.id
-  }
-}
+  pr
