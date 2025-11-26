@@ -1,4 +1,4 @@
-# Resource Group
+# Existing Resource Group
 data "ibm_resource_group" "group" {
   name = "Default"
 }
@@ -8,7 +8,7 @@ data "ibm_resource_instance" "pvs_workspace" {
   name = var.pvs_workspace_name
 }
 
-# Add SSH Key to PowerVS
+# Manage an existing SSH key in PowerVS
 resource "ibm_pi_key" "key" {
   pi_cloud_instance_id = data.ibm_resource_instance.pvs_workspace.id
   pi_key_name          = var.ssh_key_name
@@ -18,7 +18,7 @@ resource "ibm_pi_key" "key" {
 # Get existing subnet
 data "ibm_pi_network" "pvs_network" {
   pi_cloud_instance_id = data.ibm_resource_instance.pvs_workspace.id
-  pi_network_id      = "ca78b0d5-f77f-4e8c-9f2c-545ca20ff073"
+  pi_network_id        = "ca78b0d5-f77f-4e8c-9f2c-545ca20ff073"
 }
 
 # Create AIX LPAR
@@ -35,6 +35,7 @@ resource "ibm_pi_instance" "clone" {
   pi_sys_type     = "s922"
   pi_storage_type = "tier3"
 
+  # Use imported key
   pi_key_pair_name = ibm_pi_key.key.pi_key_name
 
   pi_network {
