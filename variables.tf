@@ -3,7 +3,7 @@ variable "dr_pvs_region" {
   default = "us-south"
 }
 
-variable "existing key name" {
+variable "existing_key_name" {
   description = "Name of the ssh key to be used"
   type        = string
   default     = "murphy-clone-key"
