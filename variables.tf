@@ -16,11 +16,6 @@ variable "existing_network_id" {
 }
 
 
-variable "ssh_key_rsa" {
-  description = "Public ssh key"
-  type        = string
-  default     = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINruWyhVdZXl7IDRfji22iLwBFRYFCnQEdlfmHey0Jn6"
-}
 
 variable "pvs_workspace_name" {
   description = "Name of the PowerVS workspace"
@@ -43,14 +38,14 @@ variable "pvs_aix_image_name" {
 
 variable "pvs_dr_instance_cores" {
   description = "The number of cores for the dr instance"
-  type = string
-  default = ".25"
+  type = number
+  default = .25
 }
 
 variable "pvs_dr_instance_memory" {
   description = "The amount of memory (GB) for the dr instance"
-  type = string
-  default = "2"
+  type = number
+  default = 2
 }
 
 variable "pvs_dr_instance_name" {
