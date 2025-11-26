@@ -5,9 +5,18 @@ data "ibm_resource_group" "group" {
 }
 
 
-# Existing PowerVS workspace
+# Existing PowerVS workspace (returns CRN)
 data "ibm_resource_instance" "pvs_workspace" {
   name = var.pvs_workspace_name
+}
+
+
+# Convert CRN → GUID (fixes malformed CRN errors)
+locals {
+  # Extract GUID from the CRN (second to last field)
+  pvs_cloud_instance_guid = split(":", data.ibm_resource_instance.pvs_workspace.id)[
+    length(split(":", data.ibm_resource_instance.pvs_workspace.id)) - 2
+  ]
 }
 
 
@@ -18,8 +27,7 @@ data "ibm_pi_network" "pvs_network" {
 }
 
 
-# Create AIX LPAR "Clone"
-
+# Create AIX LPAR Clone
 resource "ibm_pi_instance" "clone" {
   pi_cloud_instance_id = local.pvs_cloud_instance_guid
 
