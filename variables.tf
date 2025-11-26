@@ -10,8 +10,9 @@ variable "existing_key_name" {
 }
 
 variable "existing_network_id" {
-  description = "ca78b0d5-f77f-4e8c-9f2c-545ca20ff073"
+  description = "current subnet ID"
   type        = string
+  default     = "ca78b0d5-f77f-4e8c-9f2c-545ca20ff073"
 }
 
 
