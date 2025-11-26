@@ -9,6 +9,12 @@ variable "existing_key_name" {
   default     = "murphy-clone-key"
 }
 
+variable "existing_network_id" {
+  description = "ca78b0d5-f77f-4e8c-9f2c-545ca20ff073"
+  type        = string
+}
+
+
 variable "ssh_key_rsa" {
   description = "Public ssh key"
   type        = string
