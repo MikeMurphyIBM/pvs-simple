@@ -29,7 +29,7 @@ resource "ibm_pi_instance" "my_power_vm" {
 
   # Required instance fields (v1.85 uses pi_instance_name + pi_image_id)
   pi_instance_name = "clone-test"
-  pi_image_id      = data.ibm_pi_image.os_image.image_id
+  pi_image_id      = data.ibm_pi_image.os_image.id
 
   memory      = 2
   processors  = 0.25
