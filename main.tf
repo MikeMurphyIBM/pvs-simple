@@ -43,4 +43,15 @@ resource "ibm_pi_instance" "my_power_vm" {
   pi_image_id      = local.aix_image.id
 
   memory       = 2
-  pr
+  processors   = 0.25
+  proc_type    = "shared"
+
+  sys_type     = "s922"
+  storage_type = "tier3"
+
+  key_pair_name = "murphy-clone-key"
+
+  pi_network {
+    network_id = data.ibm_pi_network.pvs_network.network_id
+  }
+}
