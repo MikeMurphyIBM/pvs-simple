@@ -1,29 +1,37 @@
-# Existing Resource Group
+###############################################################
+# Resource Group
+###############################################################
 data "ibm_resource_group" "group" {
   name = "Default"
 }
 
-# Existing PowerVS workspace
+###############################################################
+# Existing PowerVS workspace (returns CRN)
+###############################################################
 data "ibm_resource_instance" "pvs_workspace" {
   name = var.pvs_workspace_name
 }
 
-# Manage an existing SSH key in PowerVS
-resource "ibm_pi_key" "key" {
-  pi_cloud_instance_id = data.ibm_resource_instance.pvs_workspace.id
-  pi_key_name          = var.ssh_key_name
-  pi_ssh_key           = var.ssh_key_rsa
+###############################################################
+# Convert CRN → GUID (fixes malformed CRN errors)
+###############################################################
+locals {
+  pvs_cloud_instance_guid = split(":", data.ibm_resource_instance.pvs_workspace.id)[length(split(":", data.ibm_resource_instance.pvs_workspace.id)) - 2]
 }
 
-# Get existing subnet
+###############################################################
+# Get EXISTING PowerVS network
+###############################################################
 data "ibm_pi_network" "pvs_network" {
-  pi_cloud_instance_id = data.ibm_resource_instance.pvs_workspace.id
-  pi_network_id        = "ca78b0d5-f77f-4e8c-9f2c-545ca20ff073"
+  pi_cloud_instance_id = local.pvs_cloud_instance_guid
+  pi_network_id        = var.existing_network_id
 }
 
-# Create AIX LPAR
+###############################################################
+# Create AIX LPAR Clone
+###############################################################
 resource "ibm_pi_instance" "clone" {
-  pi_cloud_instance_id = data.ibm_resource_instance.pvs_workspace.id
+  pi_cloud_instance_id = local.pvs_cloud_instance_guid
 
   pi_instance_name = var.pvs_dr_instance_name
   pi_image_id      = var.pvs_aix_image_id
@@ -35,12 +43,14 @@ resource "ibm_pi_instance" "clone" {
   pi_sys_type     = "s922"
   pi_storage_type = "tier3"
 
-  # Use imported key
-  pi_key_pair_name = ibm_pi_key.key.pi_key_name
+  # Use existing SSH key instead of creating one
+  pi_key_pair_name = var.existing_key_name
 
+  # Attach to existing PowerVS network
   pi_network {
     network_id = data.ibm_pi_network.pvs_network.id
   }
 
   pi_pin_policy = "none"
 }
+
