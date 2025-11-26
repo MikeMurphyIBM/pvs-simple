@@ -36,7 +36,13 @@ locals {
   }
 }
 
-provider "ibm" {
-    region              = lookup(local.ibm_powervs_zone_region_map, var.dr_pvs_region, null)
-    zone                = var.dr_pvs_region
+terraform {
+  required_providers {
+    ibm = {
+      source  = "ibm-cloud/ibm"
+      version = ">= 1.85.0"
+    }
+  }
 }
+
+
