@@ -11,15 +11,6 @@ data "ibm_resource_instance" "pvs_workspace" {
 }
 
 
-# Convert CRN → GUID (fixes malformed CRN errors)
-locals {
-  # Extract GUID from the CRN (second to last field)
-  pvs_cloud_instance_guid = split(":", data.ibm_resource_instance.pvs_workspace.id)[
-    length(split(":", data.ibm_resource_instance.pvs_workspace.id)) - 2
-  ]
-}
-
-
 # Get EXISTING PowerVS network
 data "ibm_pi_network" "pvs_network" {
   pi_cloud_instance_id = local.pvs_cloud_instance_guid
