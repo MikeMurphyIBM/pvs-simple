@@ -11,17 +11,17 @@ provider "ibm" {
   region = "us-south"
 }
 
-# PowerVS Workspace
+# PowerVS workspace
 data "ibm_resource_instance" "pvs_workspace" {
   name = "murphy"
 }
 
-# Get ALL images in the workspace
+# List ALL images in the workspace (CORRECT NAME)
 data "ibm_pi_images" "all_images" {
-  cloud_instance_id = data.ibm_resource_instance.pvs_workspace.guid
+  pi_cloud_instance_id = data.ibm_resource_instance.pvs_workspace.id
 }
 
-# Select the AIX image by name
+# Pick EXACT AIX image
 locals {
   aix_image = [
     for img in data.ibm_pi_images.all_images.images :
@@ -29,15 +29,15 @@ locals {
   ][0]
 }
 
-# Network lookup
+# Network lookup (old naming)
 data "ibm_pi_network" "pvs_network" {
-  cloud_instance_id = data.ibm_resource_instance.pvs_workspace.guid
-  pi_network_name   = "murphy-subnet"
+  pi_cloud_instance_id = data.ibm_resource_instance.pvs_workspace.id
+  pi_network_name      = "murphy-subnet"
 }
 
 # Create VM
 resource "ibm_pi_instance" "my_power_vm" {
-  cloud_instance_id = data.ibm_resource_instance.pvs_workspace.guid
+  pi_cloud_instance_id = data.ibm_resource_instance.pvs_workspace.id
 
   pi_instance_name = "clone-test"
   pi_image_id      = local.aix_image.id
@@ -48,7 +48,6 @@ resource "ibm_pi_instance" "my_power_vm" {
 
   sys_type     = "s922"
   storage_type = "tier3"
-
   key_pair_name = "murphy-clone-key"
 
   pi_network {
