@@ -16,26 +16,7 @@ resource "ibm_pi_key" "key" {
   pi_ssh_key           = var.ssh_key_rsa
 }
 
-resource "ibm_pi_network" "pvs_private_network" {
-  pi_network_name      = var.pvs_private_subnet_name
-  pi_cloud_instance_id = ibm_resource_instance.pvs_workspace.guid
-  pi_network_type      = "vlan"
-  pi_cidr              = var.pvs_private_subnet_cidr
-  pi_dns               = ["127.0.0.1"]
-  pi_gateway           = var.pvs_private_subnet_gateway
-  pi_network_mtu       = var.pvs_private_subnet_mtu
-  pi_ipaddress_range {
-    pi_starting_ip_address  = var.pvs_private_subnet_start_address
-    pi_ending_ip_address    = var.pvs_private_subnet_end_address
-  }
-}
 
-resource "ibm_pi_network" "pvs_public_network" {
-  pi_network_name      = var.pvs_public_subnet_name
-  pi_cloud_instance_id = ibm_resource_instance.pvs_workspace.guid
-  pi_network_type      = "pub-vlan"
-  pi_network_mtu       = var.pvs_private_subnet_mtu
-}
 
 resource "ibm_pi_image" "aix_image" {
   pi_cloud_instance_id = ibm_resource_instance.pvs_workspace.guid
@@ -46,7 +27,7 @@ resource "ibm_pi_image" "aix_image" {
   }
 }
 
-resource "ibm_pi_instance" "dr_instance" {
+resource "ibm_pi_instance" "clone" {
     pi_memory             = var.pvs_dr_instance_memory
     pi_processors         = var.pvs_dr_instance_cores
     pi_instance_name      = var.pvs_dr_instance_name
@@ -57,7 +38,5 @@ resource "ibm_pi_instance" "dr_instance" {
     pi_cloud_instance_id  = ibm_resource_instance.pvs_workspace.guid
     pi_pin_policy         = "none"
     pi_health_status      = "WARNING"
-    pi_network { network_id = ibm_pi_network.pvs_public_network.network_id }
-    pi_network { network_id = ibm_pi_network.pvs_private_network.network_id }
-    pi_storage_type = "tier1"
+    pi_storage_type = "tier3"
 }
