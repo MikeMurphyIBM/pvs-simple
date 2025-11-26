@@ -21,6 +21,7 @@ data "ibm_resource_instance" "pvs_workspace" {
 data "ibm_pi_network" "pvs_network" {
   pi_cloud_instance_id = data.ibm_resource_instance.pvs_workspace.id
   pi_network_name      = "murphy-subnet"
+  pi_data_center       = "us-south"
 }
 
 # 3. VM CREATE — Corrected PVS Instance Resource
