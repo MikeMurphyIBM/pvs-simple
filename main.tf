@@ -26,18 +26,19 @@ resource "ibm_pi_instance" "clone" {
   pi_cloud_instance_id = data.ibm_resource_instance.pvs_workspace.id
 
   pi_instance_name = var.pvs_dr_instance_name
-  pi_image_id      = var.pvs_aix_image_id    # we use your existing image ID
+  pi_image_id      = var.pvs_aix_image_id
 
   pi_memory     = var.pvs_dr_instance_memory
   pi_processors = var.pvs_dr_instance_cores
   pi_proc_type  = "shared"
-  pi_sys_type   = "s922"
+
+  pi_sys_type     = "s922"
   pi_storage_type = "tier3"
 
   pi_key_pair_name = ibm_pi_key.key.pi_key_name
 
   pi_network {
-    network_id = data.ibm_pi_network.pvs_network.network_id
+    network_id = data.ibm_pi_network.pvs_network.id
   }
 
   pi_pin_policy = "none"
