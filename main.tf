@@ -1,65 +1,45 @@
-terraform {
-  required_providers {
-    ibm = {
-      source  = "ibm-cloud/ibm"
-      version = ">= 1.85.0"
-    }
-  }
-}
-
 provider "ibm" {
   region = "us-south"
 }
 
-# ----------------------------------------------------
-# 1. GET THE POWERVS WORKSPACE INSTANCE
-# ----------------------------------------------------
+# PowerVS workspace
 data "ibm_resource_instance" "pvs_workspace" {
   name = "murphy"
 }
 
-# ----------------------------------------------------
-# 2. GET THE AIX IMAGE
-# Use the EXACT image name as shown in PowerVS UI
-# (example: "7200-05-10")
-# ----------------------------------------------------
+# AIX Image Lookup (old naming required by Schematics)
 data "ibm_pi_image" "os_image" {
-  cloud_instance_id = data.ibm_resource_instance.pvs_workspace.guid
-  name              = "AIX 7200-05-10"
+  pi_cloud_instance_id = data.ibm_resource_instance.pvs_workspace.id
+  pi_image_name        = "AIX 7200-05-10"
 }
 
-# ----------------------------------------------------
-# 3. GET THE SUBNET
-# PowerVS calls networks “pi_network”
-# ----------------------------------------------------
+# Network lookup (old naming)
 data "ibm_pi_network" "pvs_network" {
-  cloud_instance_id = data.ibm_resource_instance.pvs_workspace.guid
-  pi_network_name   = "murphy-subnet"
+  pi_cloud_instance_id = data.ibm_resource_instance.pvs_workspace.id
+  pi_network_name      = "murphy-subnet"
 }
 
-# ----------------------------------------------------
-# 4. CREATE THE VM INSTANCE
-# ----------------------------------------------------
+# VM creation (old block naming)
 resource "ibm_pi_instance" "my_power_vm" {
-  cloud_instance_id = data.ibm_resource_instance.pvs_workspace.guid
+  pi_cloud_instance_id = data.ibm_resource_instance.pvs_workspace.id
 
-  instance_name = "clone-test"
-  pi_image_id   = data.ibm_pi_image.os_image.id
+  pi_instance_name = "clone-test"
+  pi_image_id      = data.ibm_pi_image.os_image.image_id
 
-  # Compute configuration
-  pi_memory     = 2            # GB
-  pi_processors = 0.25         # processor units
-  pi_proc_type  = "shared"     # shared | dedicated
+  # CPU/memory
+  memory     = 2
+  processors = 0.25
+  proc_type  = "shared"
 
-  # System type and storage
-  pi_sys_type   = "s922"       # your hardware type
-  storage_type  = "tier3"      # tier1 | tier3
+  # system type
+  sys_type     = "s922"
+  storage_type = "tier3"
 
   # SSH Key
-  pi_key_pair_name = "murphy-clone-key"
+  key_pair_name = "murphy-clone-key"
 
-  # Network
-  network {
+  # Network block
+  pi_network {
     network_id = data.ibm_pi_network.pvs_network.network_id
   }
 }
