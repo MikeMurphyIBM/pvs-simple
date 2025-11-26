@@ -12,7 +12,7 @@ variable "ssh_key_name" {
 variable "ssh_key_rsa" {
   description = "Public ssh key"
   type        = string
-  default     = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIhdFa2zKHPN3miIx6QRVeiJG9YmDRw4UIC511scLRbK"
+  default     = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINruWyhVdZXl7IDRfji22iLwBFRYFCnQEdlfmHey0Jn6"
 }
 
 variable "pvs_workspace_name" {
