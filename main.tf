@@ -34,22 +34,18 @@ resource "ibm_pi_instance" "my_power_vm" {
   pi_cloud_instance_id = data.ibm_resource_instance.pvs_workspace.id
 
   pi_instance_name = "clone-test"
-  pi_image_id      = data.ibm_pi_image.os_image.image_id
+  pi_image_id      = data.ibm_pi_image.os_image.image
 
-  # CPU/memory
-  memory     = 2
-  processors = 0.25
-  proc_type  = "shared"
+  memory       = 2
+  processors   = 0.25
+  proc_type    = "shared"
 
-  # system type
   sys_type     = "s922"
   storage_type = "tier3"
 
-  # SSH Key
   key_pair_name = "murphy-clone-key"
 
-  # Network block
   pi_network {
-    network_id = data.ibm_pi_network.pvs_network.network_id
+    network_id = data.ibm_pi_network.pvs_network.id
   }
 }
