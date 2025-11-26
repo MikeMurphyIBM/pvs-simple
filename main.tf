@@ -25,7 +25,7 @@ data "ibm_resource_instance" "pvs_workspace" {
 # ----------------------------------------------------
 data "ibm_pi_image" "os_image" {
   cloud_instance_id = data.ibm_resource_instance.pvs_workspace.guid
-  name              = "7200-05-10"
+  name              = "AIX 7200-05-10"
 }
 
 # ----------------------------------------------------
