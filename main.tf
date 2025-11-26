@@ -20,7 +20,7 @@ data "ibm_resource_instance" "pvs_workspace" {
 # You should transition to looking up by ID if possible, but lookup by name is used here.
 data "ibm_pi_network" "pvs_network" {
   pi_cloud_instance_id = data.ibm_resource_instance.pvs_workspace.id
-  pi_network_name      = "murphy-subnet"
+  pi_network_id      = "396e9198-d7e2-4860-97c4-9a44c146ec19"
   pi_data_center       = "us-south"
 }
 
