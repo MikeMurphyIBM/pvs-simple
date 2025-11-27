@@ -35,7 +35,7 @@ resource "ibm_pi_instance" "clone" {
   pi_proc_type  = "shared"
 
   pi_sys_type     = "s922"
-  pi_storage_type = "tier3"
+  pi_storage_type = "tier1"
 
   # Use existing SSH key instead of creating one
   pi_key_pair_name = var.existing_key_name
