@@ -28,8 +28,9 @@ data "ibm_pi_network" "pvs_network" {
 resource "ibm_pi_instance" "clone" {
   pi_cloud_instance_id = local.pvs_cloud_instance_guid
 
-  pi_instance_name = var.pvs_dr_instance_name
-  pi_image_id      = var.pvs_aix_image_id
+# Deploy a blank/no-OS LPAR
+  pi_deployment_type = "VMNoStorage"
+  pi_image_id        = "IBMi-EMPTY"
 
   pi_memory     = var.pvs_dr_instance_memory
   pi_processors = var.pvs_dr_instance_cores
