@@ -33,7 +33,7 @@ variable "pvs_aix_image_id" {
 variable "pvs_aix_image_name" {
   description = "The name of the image"
   type = string
-  default = "IBMi-EMPTY"
+  default = "IBMI-EMPTY"
 }
 
 variable "pvs_dr_instance_cores" {
