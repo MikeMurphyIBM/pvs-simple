@@ -27,6 +27,7 @@ data "ibm_pi_network" "pvs_network" {
 # Create AIX LPAR Clone
 resource "ibm_pi_instance" "clone" {
   pi_cloud_instance_id = local.pvs_cloud_instance_guid
+  pi_instance_name = var.pvs_dr_instance_name
 
 # Deploy a blank/no-OS LPAR
   pi_deployment_type = "VMNoStorage"
