@@ -3,6 +3,12 @@ variable "dr_pvs_region" {
   default = "us-south"
 }
 
+variable "ibmcloud_api_key" {
+  type      = string
+  sensitive = true
+}
+
+
 variable "existing_key_name" {
   description = "Name of the ssh key to be used"
   type        = string
