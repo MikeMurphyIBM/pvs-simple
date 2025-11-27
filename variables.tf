@@ -27,14 +27,14 @@ variable "pvs_workspace_name" {
 variable "pvs_aix_image_id" {
   description = "The image ID for the AIX Image we want to deploy"
   type = string
-  default = "5ccf25e5-e543-4fe7-bbc4-cf0fbb2be420"
+  default = "IBMi-EMPTY"
 }
 
-variable "pvs_aix_image_name" {
-  description = "The name of the image"
-  type = string
-  default = "7200-05-10"
-}
+#variable "pvs_aix_image_name" {
+ # description = "The name of the image"
+  #type = string
+  #default = "7200-05-10"
+#}
 
 variable "pvs_dr_instance_cores" {
   description = "The number of cores for the dr instance"
