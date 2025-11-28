@@ -48,20 +48,20 @@ variable "pvs_aix_image_name" {
   default = "7200-05-10"
 }
 
-variable "pvs_dr_instance_cores" {
-  description = "The number of cores for the dr instance"
+variable "pvs_instance_cores" {
+  description = "The number of cores for the instance"
   type = string
   default = ".25"
 }
 
-variable "pvs_dr_instance_memory" {
-  description = "The amount of memory (GB) for the dr instance"
+variable "pvs_instance_memory" {
+  description = "The amount of memory (GB) for the instance"
   type = string
   default = "2"
 }
 
-variable "pvs_dr_instance_name" {
-  description = "The name of the DR instance"
+variable "pvs_instance_name" {
+  description = "The name of the instance"
   type = string
   default = "clone"
 }
