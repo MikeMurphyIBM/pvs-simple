@@ -21,6 +21,12 @@ variable "existing_network_id" {
   default     = "ca78b0d5-f77f-4e8c-9f2c-545ca20ff073"
 }
 
+variable "lpar_static_private_ip" {
+  description = "The specific static private IP address to assign to the LPAR."
+  type        = string
+  default     = "192.168.0.35" 
+}
+
 
 
 variable "pvs_workspace_name" {
