@@ -28,11 +28,11 @@ data "ibm_pi_network" "pvs_network" {
 resource "ibm_pi_instance" "clone" {
   pi_cloud_instance_id = local.pvs_cloud_instance_guid
 
-  pi_instance_name = var.pvs_dr_instance_name
+  pi_instance_name = var.pvs_instance_name
   pi_image_id      = var.pvs_aix_image_id
 
-  pi_memory     = var.pvs_dr_instance_memory
-  pi_processors = var.pvs_dr_instance_cores
+  pi_memory     = var.pvs_instance_memory
+  pi_processors = var.pvs_instance_cores
   pi_proc_type  = "shared"
 
   pi_sys_type     = "s1022"
