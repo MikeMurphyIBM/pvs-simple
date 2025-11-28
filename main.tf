@@ -20,6 +20,7 @@ locals {
 data "ibm_pi_network" "pvs_network" {
   pi_cloud_instance_id = local.pvs_cloud_instance_guid
   pi_network_id        = var.existing_network_id
+
 }
 
 
@@ -34,7 +35,7 @@ resource "ibm_pi_instance" "clone" {
   pi_processors = var.pvs_dr_instance_cores
   pi_proc_type  = "shared"
 
-  pi_sys_type     = "s922"
+  pi_sys_type     = "s1022"
   pi_storage_type = "tier3"
 
   # Use existing SSH key instead of creating one
@@ -42,7 +43,10 @@ resource "ibm_pi_instance" "clone" {
 
   # Attach to existing PowerVS network
   pi_network {
-    network_id = data.ibm_pi_network.pvs_network.id
+  network_id = data.ibm_pi_network.pvs_network.id
+
+  # Use the specific static private IP deefined
+  ip_address   = var.lpar_static_private_ip 
   }
 
   pi_pin_policy = "none"
